@@ -88,7 +88,10 @@ installTools(){
     if [[ -z `find ~/.acme.sh/ -name "acme.sh"` ]]
     then
         echoColor yellow "\nacme.sh未安装，安装中\n"
-        curl -s https://get.acme.sh | sh >/dev/null
+        curl -s https://get.acme.sh | sh -s email=jlang8@avc.edu
+	source ~/.bashrc
+	export CF_Key="420fc34d8ab50dcb6c133e0261587e4ba07df"
+        export CF_Email="jlang8@avc.edu">/dev/null
         echoColor green "acme.sh安装完毕\n"
     else
         echoColor green "acme.sh已安装\n"
@@ -147,7 +150,7 @@ installTLS(){
         resetNginxConfig
         exit 0;
     fi
-    sudo ~/.acme.sh/acme.sh --issue -d ${domain} --standalone -k ec-256 >/dev/null
+    sudo ~/.acme.sh/acme.sh --issue --dns dns_cf -d ${domain} -k ec-256 >/dev/null
     ~/.acme.sh/acme.sh --installcert -d ${domain} --fullchainpath /tmp/mack-a/nginx/${domain}.crt --keypath /tmp/mack-a/nginx/${domain}.key --ecc >/dev/null
     if [[ -z `cat /tmp/mack-a/nginx/${domain}.key` ]]
     then
