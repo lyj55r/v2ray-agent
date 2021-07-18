@@ -150,18 +150,18 @@ installTLS(){
         resetNginxConfig
         exit 0;
     fi
-    sudo ~/.acme.sh/acme.sh --issue --dns dns_cf -d ${domain} -k ec-256 >/dev/null
+    sudo ~/.acme.sh/acme.sh --issue -d ${domain} --standalone -k ec-256 >/dev/null
     ~/.acme.sh/acme.sh --installcert -d ${domain} --fullchainpath /tmp/mack-a/nginx/${domain}.crt --keypath /tmp/mack-a/nginx/${domain}.key --ecc >/dev/null
     if [[ -z `cat /tmp/mack-a/nginx/${domain}.key` ]]
     then
         echoColor red "证书key生成失败，请重新运行"
         resetNginxConfig
-        exit
+        
     elif [[ -z `cat /tmp/mack-a/nginx/${domain}.crt` ]]
     then
         echoColor red "证书crt生成失败，请重新运行"
         resetNginxConfig
-        exit
+        
     fi
     echoColor green "证书生成成功"
     echoColor green "证书目录/tmp/mack-a/nginx"
